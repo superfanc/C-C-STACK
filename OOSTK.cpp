@@ -26,12 +26,13 @@ int OOSTK::howMany() const{
 int OOSTK::getelem(int x) const{
     return elems[x];
 }
-OOSTK& OOSTK::push(int e){
+OOSTK& OOSTK::push(int e){    //对函数成员有改变最好都是return *this，返回函数类型的引用，防止内存分配错误
     elems[pos++]=e;
     return *this;
 }
 OOSTK& OOSTK::pop(int &e){
-    e=elems[pos--];
+    e=elems[pos-1];
+    pos--;
     return *this;
 }
 
@@ -39,14 +40,17 @@ OOSTK& OOSTK::assign(const OOSTK&s){
     delete elems;
     * (int **)&elems=new int[s.max];
     * (int *)&max=s.max;
+    for(int i=0;i<=s.pos-1;i++)
+        elems[i]=s.elems[i];
+    pos=s.pos;
     return *this;
 }
 void OOSTK::print() const{
     if(pos==0)
         std::cout<<"该栈为空栈！";
     else{
-        for(int i=0;i<=pos;i++)
-            std::cout<<"第"<<i<<"个字符为:"<<elems[i]<<std::endl;
+        for(int i=0;i<=pos-1;i++)
+            std::cout<<"下标为"<<i<<"个字符为:"<<elems[i]<<std::endl;
     }
 }
 OOSTK::~OOSTK(){
